@@ -1,0 +1,62 @@
+Date : 2020-05-08 13:27:18
+Directory : f:\Flutter Project\colorgame\lib
+Total : 26 files,  2065 codes, 38 comments, 171 blanks, all 2274 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         26 |      2,065 |         38 |        171 |      2,274 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                            | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                               |         26 |      2,065 |         38 |        171 |      2,274 |
+| bloc                                                                            |         10 |        129 |          0 |         54 |        183 |
+| bloc\color_picker                                                               |          3 |         45 |          0 |         21 |         66 |
+| bloc\color_picker\bloc                                                          |          3 |         45 |          0 |         21 |         66 |
+| bloc\high_score                                                                 |          3 |         40 |          0 |         16 |         56 |
+| bloc\high_score\bloc                                                            |          3 |         40 |          0 |         16 |         56 |
+| bloc\language                                                                   |          3 |         41 |          0 |         17 |         58 |
+| bloc\language\bloc                                                              |          3 |         41 |          0 |         17 |         58 |
+| utils                                                                           |          8 |        155 |         38 |         31 |        224 |
+| utils\fonts                                                                     |          2 |         59 |         30 |          8 |         97 |
+| view                                                                            |          5 |      1,474 |          0 |         70 |      1,544 |
+| view\game_screen                                                                |          3 |        909 |          0 |         49 |        958 |
+| widget                                                                          |          2 |        266 |          0 |         13 |        279 |
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                        | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| f:\Flutter Project\colorgame\lib\bloc\bloc.dart                                 | Dart     |          3 |          0 |          0 |          3 |
+| f:\Flutter Project\colorgame\lib\bloc\color_picker\bloc\color_picker_bloc.dart  | Dart     |         24 |          0 |          5 |         29 |
+| f:\Flutter Project\colorgame\lib\bloc\color_picker\bloc\color_picker_event.dart | Dart     |         10 |          0 |          8 |         18 |
+| f:\Flutter Project\colorgame\lib\bloc\color_picker\bloc\color_picker_state.dart | Dart     |         11 |          0 |          8 |         19 |
+| f:\Flutter Project\colorgame\lib\bloc\high_score\bloc\high_score_bloc.dart      | Dart     |         24 |          0 |          6 |         30 |
+| f:\Flutter Project\colorgame\lib\bloc\high_score\bloc\high_score_event.dart     | Dart     |          8 |          0 |          5 |         13 |
+| f:\Flutter Project\colorgame\lib\bloc\high_score\bloc\high_score_state.dart     | Dart     |          8 |          0 |          5 |         13 |
+| f:\Flutter Project\colorgame\lib\bloc\language\bloc\language_bloc.dart          | Dart     |         25 |          0 |          7 |         32 |
+| f:\Flutter Project\colorgame\lib\bloc\language\bloc\language_event.dart         | Dart     |          8 |          0 |          5 |         13 |
+| f:\Flutter Project\colorgame\lib\bloc\language\bloc\language_state.dart         | Dart     |          8 |          0 |          5 |         13 |
+| f:\Flutter Project\colorgame\lib\main.dart                                      | Dart     |         41 |          0 |          3 |         44 |
+| f:\Flutter Project\colorgame\lib\utils\admob.dart                               | Dart     |         11 |          1 |          6 |         18 |
+| f:\Flutter Project\colorgame\lib\utils\app_colors.dart                          | Dart     |          9 |          7 |          3 |         19 |
+| f:\Flutter Project\colorgame\lib\utils\color_generator.dart                     | Dart     |         34 |          0 |          4 |         38 |
+| f:\Flutter Project\colorgame\lib\utils\fonts\iconly_bold_icons.dart             | Dart     |         30 |         15 |          4 |         49 |
+| f:\Flutter Project\colorgame\lib\utils\fonts\iconly_broken_icons.dart           | Dart     |         29 |         15 |          4 |         48 |
+| f:\Flutter Project\colorgame\lib\utils\preference.dart                          | Dart     |         25 |          0 |          5 |         30 |
+| f:\Flutter Project\colorgame\lib\utils\theme_changer.dart                       | Dart     |         13 |          0 |          5 |         18 |
+| f:\Flutter Project\colorgame\lib\utils\utils.dart                               | Dart     |          4 |          0 |          0 |          4 |
+| f:\Flutter Project\colorgame\lib\view\game_mode.dart                            | Dart     |        313 |          0 |         10 |        323 |
+| f:\Flutter Project\colorgame\lib\view\game_screen\color_picker.dart             | Dart     |        123 |          0 |          9 |        132 |
+| f:\Flutter Project\colorgame\lib\view\game_screen\normal_mode.dart              | Dart     |        427 |          0 |         21 |        448 |
+| f:\Flutter Project\colorgame\lib\view\game_screen\speed_mode.dart               | Dart     |        359 |          0 |         19 |        378 |
+| f:\Flutter Project\colorgame\lib\view\home_page.dart                            | Dart     |        252 |          0 |         11 |        263 |
+| f:\Flutter Project\colorgame\lib\widget\neu_button.dart                         | Dart     |        200 |          0 |          9 |        209 |
+| f:\Flutter Project\colorgame\lib\widget\neu_slider.dart                         | Dart     |         66 |          0 |          4 |         70 |
+| Total                                                                           |          |      2,065 |         38 |        171 |      2,274 |
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

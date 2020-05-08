@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "872404362383",
+    "firebase_url": "https://color-game-9558d.firebaseio.com",
+    "project_id": "color-game-9558d",
+    "storage_bucket": "color-game-9558d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872404362383:android:9e3ad90ff8130b74627cfa",
+        "android_client_info": {
+          "package_name": "com.definev_.colorgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "872404362383-983rikl7inmj5910qkftjsdc1q84291g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4Umraa-ES0-wowibhGa4gyDhTJeu0nHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "872404362383-983rikl7inmj5910qkftjsdc1q84291g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
