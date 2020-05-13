@@ -17,8 +17,8 @@
 
 ## Download in google store or try in web 🚀
 
-Google store: https://play.google.com/store/apps/details?id=com.definev_.colorgame
-Web: https://definev.github.io/colorGame/#/
+#### Google store: https://play.google.com/store/apps/details?id=com.definev_.colorgame
+#### Web: https://definev.github.io/colorGame/#/
 
 ## Contact me 📧
 #### Email : big.plus.uwu@gmail.com
