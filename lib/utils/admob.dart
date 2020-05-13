@@ -4,6 +4,7 @@ class Admob {
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     // testDevices: testDevice != null ? <String>[testDevice] : null,
     nonPersonalizedAds: false,
+    childDirected: true,
     keywords: <String>['Game', 'Color', 'Puzzle Game'],
   );
 

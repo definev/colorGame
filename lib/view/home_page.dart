@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Column _highScore(BuildContext context, String language) {
+  Widget _highScore(BuildContext context, String language) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -221,37 +221,6 @@ class _HomePageState extends State<HomePage> {
                                 child: Image.asset('assets/us.png')))))
               ]);
         }
-        return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          NeuButton(
-              borderRadius: BorderRadius.circular(
-                MediaQuery.of(context).size.height / 10,
-              ),
-              position: 7,
-              height: MediaQuery.of(context).size.height / 10,
-              width: MediaQuery.of(context).size.height / 10,
-              shadowLength: 4,
-              child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Center(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Image.asset(
-                            'assets/us.png',
-                          ))))),
-          NeuButton(
-              borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.height / 10),
-              position: 7,
-              height: MediaQuery.of(context).size.height / 10,
-              width: MediaQuery.of(context).size.height / 10,
-              shadowLength: 4,
-              child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Center(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Image.asset('assets/vn.png')))))
-        ]);
       },
     );
   }

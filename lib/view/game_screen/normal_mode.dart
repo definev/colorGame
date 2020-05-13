@@ -7,6 +7,7 @@ import 'package:colorgame/view/game_screen/color_picker.dart';
 import 'package:colorgame/widget/neu_button.dart';
 import 'package:colorgame/widget/neu_slider.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -85,16 +86,24 @@ class _NormalModeState extends State<NormalMode>
             width: height / 9.3,
             child: Icon(Icons.close,
                 size: height / 17, color: AppColors.textColor),
-            onTap: () {
+            onTap: () async {
+              try {
+                final result = await InternetAddress.lookup('google.com');
+                if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                  createInterstitialAd()
+                    ..load()
+                    ..show();
+                }
+              } on SocketException catch (_) {}
               Navigator.pop(context);
             })
       ];
 
   @override
   void dispose() {
-    super.dispose();
     _animationController.stop();
     _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -112,19 +121,21 @@ class _NormalModeState extends State<NormalMode>
 
       setState(() {});
     });
-    FirebaseAdMob.instance.initialize(appId: Admob.appID);
-    _rewardedVideoAd.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      if (event == RewardedVideoAdEvent.rewarded) {
-        _colorPickerBloc.add(ContinueEvent());
-        setState(() => _videoAds++);
-      }
-      if (event == RewardedVideoAdEvent.loaded) {
-        _rewardedVideoAd.show();
-      }
-      if (event == RewardedVideoAdEvent.failedToLoad) {}
-    };
-    _hasConnectSet();
+    if (!kIsWeb) {
+      FirebaseAdMob.instance.initialize(appId: Admob.appID);
+      _rewardedVideoAd.listener =
+          (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+        if (event == RewardedVideoAdEvent.rewarded) {
+          _colorPickerBloc.add(ContinueEvent());
+          setState(() => _videoAds++);
+        }
+        if (event == RewardedVideoAdEvent.loaded) {
+          _rewardedVideoAd.show();
+        }
+        if (event == RewardedVideoAdEvent.failedToLoad) {}
+      };
+      _hasConnectSet();
+    }
   }
 
   _hasConnectSet() async {
@@ -194,6 +205,7 @@ class _NormalModeState extends State<NormalMode>
   }
 
   Future<bool> _onWillPop() async {
+    if (kIsWeb) return true;
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -288,7 +300,7 @@ class _NormalModeState extends State<NormalMode>
                               secondToWait(false);
                               if (state.isNewHighScore)
                                 _highScoreBloc.add(SetHighScoreEvent(level));
-                              if (level > 10 && adLevel % 2 == 1) {
+                              if (level > 10 && adLevel % 2 == 1 && !kIsWeb) {
                                 try {
                                   final result = await InternetAddress.lookup(
                                       'google.com');
@@ -323,7 +335,7 @@ class _NormalModeState extends State<NormalMode>
                                 return _buildGameOverNoti(context, true);
                               }
                             }
-                            return _buildGameOverNoti(context, false);
+                            return _buildGameOverNoti(context, true);
                           })
                     ]))));
   }
@@ -348,13 +360,14 @@ class _NormalModeState extends State<NormalMode>
                         Text(
                           _languageBloc.language == "us"
                               ? "Game Over!"
-                              : "Hết game!",
+                              : "Kết thúc!",
                           style: TextStyle(
                             fontFamily: 'Bungee',
                             color: AppColors.textColor,
                             fontSize: height / 17,
                           ),
                         ),
+                        Container(height: 15),
                         isNewHighScore
                             ? Column(children: [
                                 Text(

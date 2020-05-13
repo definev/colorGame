@@ -6,6 +6,7 @@ import 'package:colorgame/view/game_screen/color_picker.dart';
 import 'package:colorgame/widget/neu_button.dart';
 import 'package:colorgame/widget/neu_slider.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +19,8 @@ class _SpeedModeState extends State<SpeedMode>
     with SingleTickerProviderStateMixin {
   ColorPickerBloc _colorPickerBloc;
   LanguageBloc _languageBloc;
+  HighScoreBloc _highScoreBloc;
+
   int level = 1;
   int adLevel = 0;
   int second = 60;
@@ -66,7 +69,15 @@ class _SpeedModeState extends State<SpeedMode>
           size: height / 17,
           color: AppColors.textColor,
         ),
-        onTap: () {
+        onTap: () async {
+          try {
+            final result = await InternetAddress.lookup('google.com');
+            if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+              createInterstitialAd()
+                ..load()
+                ..show();
+            }
+          } on SocketException catch (_) {}
           Navigator.pop(context);
         },
       ),
@@ -75,9 +86,9 @@ class _SpeedModeState extends State<SpeedMode>
 
   @override
   void dispose() {
-    super.dispose();
     _animationController.stop();
     _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -117,6 +128,7 @@ class _SpeedModeState extends State<SpeedMode>
   }
 
   Future<bool> _onWillPop() async {
+    if (kIsWeb) return true;
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -136,7 +148,9 @@ class _SpeedModeState extends State<SpeedMode>
   @override
   Widget build(BuildContext context) {
     _colorPickerBloc = BlocProvider.of<ColorPickerBloc>(context);
+    _highScoreBloc = BlocProvider.of<HighScoreBloc>(context);
     _languageBloc = BlocProvider.of<LanguageBloc>(context);
+
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
 
@@ -191,8 +205,8 @@ class _SpeedModeState extends State<SpeedMode>
                       padding: EdgeInsets.symmetric(horizontal: 30),
                       child: NeuSlider(
                         height: height / 35,
-                        percent: (60000 - _animationController.value * 60000) /
-                            60000,
+                        percent:
+                            (60000 * (1 - _animationController.value)) / 60000,
                         width: height / 2 + 10,
                         borderRadius: BorderRadius.circular(
                           height / 9.3,
@@ -224,8 +238,10 @@ class _SpeedModeState extends State<SpeedMode>
                   if (state is ColorPickerContinue) setState(() {});
 
                   if (state is ColorPickerGameOver) {
+                    if (state.isNewHighScore)
+                      _highScoreBloc.add(SetHighScoreEvent(level));
                     _animationController.value = 0;
-                    if (level > 10 && adLevel % 2 == 1) {
+                    if (level > 10 && adLevel % 2 == 1 && !kIsWeb) {
                       try {
                         final result =
                             await InternetAddress.lookup('google.com');
@@ -256,10 +272,10 @@ class _SpeedModeState extends State<SpeedMode>
                   }
                   if (state is ColorPickerGameOver) {
                     if (state.isNewHighScore) {
-                      return _buildGameOverNoti(context);
+                      return _buildGameOverNoti(context, true);
                     }
                   }
-                  return _buildGameOverNoti(context);
+                  return _buildGameOverNoti(context, false);
                 },
               ),
             ],
@@ -269,7 +285,7 @@ class _SpeedModeState extends State<SpeedMode>
     );
   }
 
-  Widget _buildGameOverNoti(BuildContext context) {
+  Widget _buildGameOverNoti(BuildContext context, bool isNewHighScore) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: NeuButton(
@@ -287,14 +303,36 @@ class _SpeedModeState extends State<SpeedMode>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  _languageBloc.language == "us" ? "Game Over!" : "Hết game!",
+                  _languageBloc.language == "us" ? "Game Over!" : "Kết thúc!",
                   style: TextStyle(
                     fontFamily: 'Bungee',
                     color: AppColors.textColor,
                     fontSize: height / 17,
                   ),
                 ),
-                Container(height: 0),
+                Container(height: 15),
+                isNewHighScore
+                    ? Column(children: [
+                        Text(
+                          _languageBloc.language == "us"
+                              ? "Congratulation!!!"
+                              : "Chúc mừng!!!",
+                          style: TextStyle(
+                            fontFamily: 'Bungee Inline',
+                            color: Colors.yellow[200],
+                            fontSize: height / 40,
+                          ),
+                        ),
+                        Text(
+                            _languageBloc.language == "us"
+                                ? "Level $level is your new high score!"
+                                : "Cấp $level là điểm cao mới của bạn!",
+                            style: TextStyle(
+                                fontFamily: 'Bungee Inline',
+                                color: Colors.yellow[200],
+                                fontSize: height / 40))
+                      ])
+                    : Container(height: 0),
               ],
             ),
             Row(
