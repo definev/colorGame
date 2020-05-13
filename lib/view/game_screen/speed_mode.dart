@@ -43,11 +43,11 @@ class _SpeedModeState extends State<SpeedMode>
         shadowFallLength: 0,
         borderRadius: BorderRadius.circular(height / 10),
         position: 5,
-        height: height / 9.3,
-        width: height / 9.3,
+        height: width / 5,
+        width: width / 5,
         child: Icon(
           Icons.refresh,
-          size: height / 17,
+          size: width / 10,
           color: AppColors.textColor,
         ),
         onTap: () {
@@ -62,11 +62,11 @@ class _SpeedModeState extends State<SpeedMode>
         shadowFallLength: 0,
         borderRadius: BorderRadius.circular(height / 10),
         position: 5,
-        height: height / 9.3,
-        width: height / 9.3,
+        height: width / 5,
+        width: width / 5,
         child: Icon(
           Icons.close,
-          size: height / 17,
+          size: width / 10,
           color: AppColors.textColor,
         ),
         onTap: () async {
@@ -170,115 +170,117 @@ class _SpeedModeState extends State<SpeedMode>
               ],
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: _languageBloc.language == 'us'
-                                  ? 'Time: '
-                                  : 'Thời gian: ',
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: _languageBloc.language == 'us'
+                                    ? 'Time: '
+                                    : 'Thời gian: ',
+                              ),
+                              TextSpan(text: _getAmountTime()),
+                            ],
+                            style: TextStyle(
+                              fontFamily: 'Bungee',
+                              fontSize: height / 20,
+                              color: AppColors.textColor,
                             ),
-                            TextSpan(text: _getAmountTime()),
-                          ],
-                          style: TextStyle(
-                            fontFamily: 'Bungee',
-                            fontSize: height / 20,
-                            color: AppColors.textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    AnimatedBuilder(
+                      animation: _animationController,
+                      builder: (context, child) => Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        child: NeuSlider(
+                          height: height / 35,
+                          percent: (60000 * (1 - _animationController.value)) /
+                              60000,
+                          width: height / 2 + 10,
+                          borderRadius: BorderRadius.circular(
+                            width / 5,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 15),
-                  AnimatedBuilder(
-                    animation: _animationController,
-                    builder: (context, child) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30),
-                      child: NeuSlider(
-                        height: height / 35,
-                        percent:
-                            (60000 * (1 - _animationController.value)) / 60000,
-                        width: height / 2 + 10,
-                        borderRadius: BorderRadius.circular(
-                          height / 9.3,
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      _languageBloc.language == 'us'
+                          ? 'Level: $level'
+                          : 'Cấp: $level',
+                      style: TextStyle(
+                        fontFamily: 'Bungee',
+                        fontSize: height / 20,
+                        color: AppColors.textColor,
+                      ),
+                    ),
+                  ],
+                ),
+                BlocConsumer(
+                  bloc: _colorPickerBloc,
+                  listener: (context, state) async {
+                    if (state is ColorPickerDone) {
+                      if (level == 1) _animationController.forward();
+                      setState(() => level++);
+                    }
+
+                    if (state is ColorPickerContinue) setState(() {});
+
+                    if (state is ColorPickerGameOver) {
+                      if (state.isNewHighScore)
+                        _highScoreBloc.add(SetHighScoreEvent(level));
+                      _animationController.value = 0;
+                      if (level > 10 && adLevel % 2 == 1 && !kIsWeb) {
+                        try {
+                          final result =
+                              await InternetAddress.lookup('google.com');
+                          if (result.isNotEmpty &&
+                              result[0].rawAddress.isNotEmpty) {
+                            createInterstitialAd()
+                              ..load()
+                              ..show();
+                          }
+                        } on SocketException catch (_) {}
+                      }
+                      adLevel++;
+                    }
+                  },
+                  builder: (BuildContext context, state) {
+                    if (state is ColorPickerWaitting ||
+                        state is ColorPickerInitial ||
+                        state is ColorPickerDone ||
+                        state is ColorPickerContinue) {
+                      return SizedBox(
+                        height: width,
+                        width: width,
+                        child: ColorPicker(
+                          level: level,
+                          numOfColor: numOfColorPerLevel(level),
                         ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    _languageBloc.language == 'us'
-                        ? 'Level: $level'
-                        : 'Cấp: $level',
-                    style: TextStyle(
-                      fontFamily: 'Bungee',
-                      fontSize: height / 20,
-                      color: AppColors.textColor,
-                    ),
-                  ),
-                ],
-              ),
-              BlocConsumer(
-                bloc: _colorPickerBloc,
-                listener: (context, state) async {
-                  if (state is ColorPickerDone) {
-                    if (level == 1) _animationController.forward();
-                    setState(() => level++);
-                  }
-
-                  if (state is ColorPickerContinue) setState(() {});
-
-                  if (state is ColorPickerGameOver) {
-                    if (state.isNewHighScore)
-                      _highScoreBloc.add(SetHighScoreEvent(level));
-                    _animationController.value = 0;
-                    if (level > 10 && adLevel % 2 == 1 && !kIsWeb) {
-                      try {
-                        final result =
-                            await InternetAddress.lookup('google.com');
-                        if (result.isNotEmpty &&
-                            result[0].rawAddress.isNotEmpty) {
-                          createInterstitialAd()
-                            ..load()
-                            ..show();
-                        }
-                      } on SocketException catch (_) {}
+                      );
                     }
-                    adLevel++;
-                  }
-                },
-                builder: (BuildContext context, state) {
-                  if (state is ColorPickerWaitting ||
-                      state is ColorPickerInitial ||
-                      state is ColorPickerDone ||
-                      state is ColorPickerContinue) {
-                    return SizedBox(
-                      height: height / 1.7,
-                      width: height / 1.7,
-                      child: ColorPicker(
-                        level: level,
-                        numOfColor: numOfColorPerLevel(level),
-                      ),
-                    );
-                  }
-                  if (state is ColorPickerGameOver) {
-                    if (state.isNewHighScore) {
-                      return _buildGameOverNoti(context, true);
+                    if (state is ColorPickerGameOver) {
+                      if (state.isNewHighScore) {
+                        return _buildGameOverNoti(context, true);
+                      }
                     }
-                  }
-                  return _buildGameOverNoti(context, false);
-                },
-              ),
-            ],
+                    return _buildGameOverNoti(context, false);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -293,8 +295,8 @@ class _SpeedModeState extends State<SpeedMode>
         shadowFallLength: 0,
         borderRadius: BorderRadius.circular(15),
         position: 30,
-        height: height / 1.7,
-        width: height / 1.7,
+        height: width,
+        width: width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -307,7 +309,7 @@ class _SpeedModeState extends State<SpeedMode>
                   style: TextStyle(
                     fontFamily: 'Bungee',
                     color: AppColors.textColor,
-                    fontSize: height / 17,
+                    fontSize: width / 10,
                   ),
                 ),
                 Container(height: 15),
@@ -320,19 +322,21 @@ class _SpeedModeState extends State<SpeedMode>
                           style: TextStyle(
                             fontFamily: 'Bungee Inline',
                             color: Colors.yellow[200],
-                            fontSize: height / 40,
+                            fontSize: width / 25,
                           ),
                         ),
                         Text(
-                            _languageBloc.language == "us"
-                                ? "Level $level is your new high score!"
-                                : "Cấp $level là điểm cao mới của bạn!",
-                            style: TextStyle(
-                                fontFamily: 'Bungee Inline',
-                                color: Colors.yellow[200],
-                                fontSize: height / 40))
+                          _languageBloc.language == "us"
+                              ? "Level $level is your new high score!"
+                              : "Cấp $level là điểm cao mới của bạn!",
+                          style: TextStyle(
+                            fontFamily: 'Bungee Inline',
+                            color: Colors.yellow[200],
+                            fontSize: width / 25,
+                          ),
+                        )
                       ])
-                    : Container(height: 0),
+                    : Container(height: 0)
               ],
             ),
             Row(

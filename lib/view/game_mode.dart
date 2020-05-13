@@ -87,7 +87,7 @@ class _GameModeState extends State<GameMode> {
         style: TextStyle(
           fontWeight: FontWeight.w100,
           fontFamily: 'Bungee Inline',
-          fontSize: MediaQuery.of(context).size.height / 13.5,
+          fontSize: MediaQuery.of(context).size.width / 7.5,
           color: AppColors.textColor,
         ),
         textAlign: TextAlign.center,
@@ -111,7 +111,7 @@ class _GameModeState extends State<GameMode> {
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
                   fontFamily: 'Bungee Inline',
-                  fontSize: MediaQuery.of(context).size.height / 20,
+                  fontSize: MediaQuery.of(context).size.width / 10.5,
                   color: AppColors.textColor,
                 ),
                 textAlign: TextAlign.center,
@@ -137,18 +137,18 @@ class _GameModeState extends State<GameMode> {
         borderRadius: BorderRadius.circular(20),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.height / 40),
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   language == 'us' ? 'Normal mode' : 'Chơi thường',
                   style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Bungee',
-                      fontSize: MediaQuery.of(context).size.height / 30,
-                      color: AppColors.textColor),
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Bungee',
+                    fontSize: MediaQuery.of(context).size.width / 18,
+                    color: AppColors.textColor,
+                  ),
                 ),
                 Image.asset('assets/arrow.png',
                     height: MediaQuery.of(context).size.height / 20),
@@ -170,41 +170,47 @@ class _GameModeState extends State<GameMode> {
         },
       ),
       NeuButton(
-          shadowLength: 4,
-          shadowFallLength: 0,
-          position: 10,
-          height: MediaQuery.of(context).size.height / 7.1,
-          width: MediaQuery.of(context).size.width / 1.5,
-          borderRadius: BorderRadius.circular(20),
-          child: Center(
-              child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.height / 40,
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          language == 'us' ? 'Speed mode' : 'Chơi nhanh',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Bungee',
-                              fontSize: MediaQuery.of(context).size.height / 30,
-                              color: AppColors.textColor),
-                        ),
-                        Image.asset('assets/arrow.png',
-                            height: MediaQuery.of(context).size.height / 20),
-                      ]))),
-          onTap: () {
-            Navigator.push(
-                context,
-                PageTransition(
-                    type: PageTransitionType.fade,
-                    child: BlocProvider<ColorPickerBloc>(
-                      create: (context) => ColorPickerBloc(),
-                      child: SpeedMode(),
-                    )));
-          })
+        shadowLength: 4,
+        shadowFallLength: 0,
+        position: 10,
+        height: MediaQuery.of(context).size.height / 7.1,
+        width: MediaQuery.of(context).size.width / 1.5,
+        borderRadius: BorderRadius.circular(20),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 15,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  language == 'us' ? 'Speed mode' : 'Chơi nhanh',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Bungee',
+                      fontSize: MediaQuery.of(context).size.width / 18,
+                      color: AppColors.textColor),
+                ),
+                Image.asset('assets/arrow.png',
+                    height: MediaQuery.of(context).size.height / 20),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.fade,
+              child: BlocProvider<ColorPickerBloc>(
+                create: (context) => ColorPickerBloc(),
+                child: SpeedMode(),
+              ),
+            ),
+          );
+        },
+      ),
     ]);
   }
 
@@ -217,133 +223,158 @@ class _GameModeState extends State<GameMode> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 NeuButton(
-                    isChoose: state.language == "vn" ? true : false,
-                    borderRadius: BorderRadius.circular(
-                      MediaQuery.of(context).size.height / 10,
+                  isChoose: state.language == "vn" ? true : false,
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.height / 10,
+                  ),
+                  position: 7,
+                  height: MediaQuery.of(context).size.height / 10,
+                  width: MediaQuery.of(context).size.height / 10,
+                  shadowLength: 4,
+                  onTap: () {
+                    if (_languageBloc.language != "vn") {
+                      _languageBloc.add(ChangeLanguageEvent(language: "vn"));
+                      setState(() {});
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.asset(
+                          'assets/vn.png',
+                        ),
+                      ),
                     ),
-                    position: 7,
-                    height: MediaQuery.of(context).size.height / 10,
-                    width: MediaQuery.of(context).size.height / 10,
-                    shadowLength: 4,
-                    onTap: () {
-                      if (_languageBloc.language != "vn") {
-                        _languageBloc.add(ChangeLanguageEvent(language: "vn"));
-                        setState(() {});
-                      }
-                    },
-                    child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Center(
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
-                                child: Image.asset(
-                                  'assets/vn.png',
-                                ))))),
+                  ),
+                ),
                 NeuButton(
-                    borderRadius: BorderRadius.circular(
-                      MediaQuery.of(context).size.height / 10,
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.height / 10,
+                  ),
+                  position: 7,
+                  height: MediaQuery.of(context).size.height / 10,
+                  width: MediaQuery.of(context).size.height / 10,
+                  shadowLength: 4,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_back,
+                        size: MediaQuery.of(context).size.height / 20,
+                        color: Colors.white,
+                      ),
                     ),
-                    position: 7,
-                    height: MediaQuery.of(context).size.height / 10,
-                    width: MediaQuery.of(context).size.height / 10,
-                    shadowLength: 4,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Center(
-                            child: Icon(
-                          Icons.arrow_back,
-                          size: MediaQuery.of(context).size.height / 20,
-                          color: Colors.white,
-                        )))),
+                  ),
+                ),
                 NeuButton(
-                    isChoose: state.language == "us" ? true : false,
-                    borderRadius: BorderRadius.circular(
-                      MediaQuery.of(context).size.height / 10,
+                  isChoose: state.language == "us" ? true : false,
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.height / 10,
+                  ),
+                  position: 7,
+                  height: MediaQuery.of(context).size.height / 10,
+                  width: MediaQuery.of(context).size.height / 10,
+                  shadowLength: 4,
+                  onTap: () {
+                    if (_languageBloc.language != "us") {
+                      _languageBloc.add(ChangeLanguageEvent(language: "us"));
+                      setState(() {});
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.asset('assets/us.png'),
+                      ),
                     ),
-                    position: 7,
-                    height: MediaQuery.of(context).size.height / 10,
-                    width: MediaQuery.of(context).size.height / 10,
-                    shadowLength: 4,
-                    onTap: () {
-                      if (_languageBloc.language != "us") {
-                        _languageBloc.add(ChangeLanguageEvent(language: "us"));
-                        setState(() {});
-                      }
-                    },
-                    child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Center(
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
-                                child: Image.asset('assets/us.png')))))
+                  ),
+                ),
               ]);
         }
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             NeuButton(
-                borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.height / 10),
-                position: 7,
-                height: MediaQuery.of(context).size.height / 10,
-                width: MediaQuery.of(context).size.height / 10,
-                shadowLength: 4,
-                child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Center(
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: Image.asset('assets/us.png'))))),
-            NeuButton(
-                borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.height / 10,
+              borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.height / 10),
+              position: 7,
+              height: MediaQuery.of(context).size.height / 10,
+              width: MediaQuery.of(context).size.height / 10,
+              shadowLength: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Image.asset('assets/us.png'),
+                  ),
                 ),
-                position: 7,
-                height: MediaQuery.of(context).size.height / 10,
-                width: MediaQuery.of(context).size.height / 10,
-                shadowLength: 4,
-                onTap: () => Navigator.pop(context),
-                child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Center(
-                        child: Icon(
-                      Icons.arrow_back,
-                      size: MediaQuery.of(context).size.height / 20,
-                      color: Colors.white,
-                    )))),
+              ),
+            ),
             NeuButton(
-                borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.height / 10,
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.height / 10,
+              ),
+              position: 7,
+              height: MediaQuery.of(context).size.height / 10,
+              width: MediaQuery.of(context).size.height / 10,
+              shadowLength: 4,
+              onTap: () => Navigator.pop(context),
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Center(
+                  child: Icon(
+                    Icons.arrow_back,
+                    size: MediaQuery.of(context).size.height / 20,
+                    color: Colors.white,
+                  ),
                 ),
-                position: 7,
-                height: MediaQuery.of(context).size.height / 10,
-                width: MediaQuery.of(context).size.height / 10,
-                shadowLength: 4,
-                onTap: () => Navigator.pop(context),
-                child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Center(
-                        child: Icon(
-                      Icons.arrow_back,
-                      size: MediaQuery.of(context).size.height / 20,
-                      color: Colors.white,
-                    )))),
+              ),
+            ),
             NeuButton(
-                borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.height / 10),
-                position: 7,
-                height: MediaQuery.of(context).size.height / 10,
-                width: MediaQuery.of(context).size.height / 10,
-                shadowLength: 4,
-                child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Center(
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: Image.asset('assets/vn.png')))))
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.height / 10,
+              ),
+              position: 7,
+              height: MediaQuery.of(context).size.height / 10,
+              width: MediaQuery.of(context).size.height / 10,
+              shadowLength: 4,
+              onTap: () => Navigator.pop(context),
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Center(
+                  child: Icon(
+                    Icons.arrow_back,
+                    size: MediaQuery.of(context).size.height / 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            NeuButton(
+              borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.height / 10),
+              position: 7,
+              height: MediaQuery.of(context).size.height / 10,
+              width: MediaQuery.of(context).size.height / 10,
+              shadowLength: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Image.asset('assets/vn.png'),
+                  ),
+                ),
+              ),
+            ),
           ],
         );
       },

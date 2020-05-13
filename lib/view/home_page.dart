@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(
           fontWeight: FontWeight.w100,
           fontFamily: 'Bungee Inline',
-          fontSize: MediaQuery.of(context).size.height / 13.5,
+          fontSize: MediaQuery.of(context).size.width / 7.5,
           color: AppColors.textColor,
         ),
         textAlign: TextAlign.center,
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
                   fontFamily: 'Bungee Inline',
-                  fontSize: MediaQuery.of(context).size.height / 20,
+                  fontSize: MediaQuery.of(context).size.width / 10.5,
                   color: AppColors.textColor,
                 ),
                 textAlign: TextAlign.center,
@@ -141,12 +141,11 @@ class _HomePageState extends State<HomePage> {
         shadowLength: 4,
         shadowFallLength: 0,
         position: 10,
-        height: MediaQuery.of(context).size.height / 6,
-        width: MediaQuery.of(context).size.width / 2,
+        height: MediaQuery.of(context).size.height / 7.1,
+        width: MediaQuery.of(context).size.width / 1.5,
         borderRadius: BorderRadius.circular(20),
         child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.height / 40),
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -154,10 +153,11 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Bungee',
-                        fontSize: MediaQuery.of(context).size.height / 17,
+                        fontSize: MediaQuery.of(context).size.width / 10,
                         color: AppColors.textColor,
                       )),
-                  Image.asset('assets/background.png', height: 45),
+                  Image.asset('assets/background.png',
+                      height: MediaQuery.of(context).size.width / 10),
                 ])),
         onTap: () {
           Navigator.push(context,

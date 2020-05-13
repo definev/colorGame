@@ -69,10 +69,10 @@ class _NormalModeState extends State<NormalMode>
           shadowFallLength: 0,
           borderRadius: BorderRadius.circular(height / 10),
           position: 5,
-          height: height / 9.3,
-          width: height / 9.3,
-          child: Icon(Icons.refresh,
-              size: height / 17, color: AppColors.textColor),
+          height: width / 5,
+          width: width / 5,
+          child:
+              Icon(Icons.refresh, size: width / 10, color: AppColors.textColor),
           onTap: () {
             setState(() => _colorPickerBloc.add(ReplayEvent()));
           },
@@ -82,10 +82,10 @@ class _NormalModeState extends State<NormalMode>
             shadowFallLength: 0,
             borderRadius: BorderRadius.circular(height / 10),
             position: 5,
-            height: height / 9.3,
-            width: height / 9.3,
-            child: Icon(Icons.close,
-                size: height / 17, color: AppColors.textColor),
+            height: width / 5,
+            width: width / 5,
+            child:
+                Icon(Icons.close, size: width / 10, color: AppColors.textColor),
             onTap: () async {
               try {
                 final result = await InternetAddress.lookup('google.com');
@@ -236,108 +236,110 @@ class _NormalModeState extends State<NormalMode>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [AppColors.lightShadow, AppColors.darkShadow])),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(children: [
-                        Text(
-                            _languageBloc.language == 'us'
-                                ? 'Time:'
-                                : 'Thời gian:',
-                            style: TextStyle(
-                                fontFamily: 'Bungee',
-                                fontSize: height / 20,
-                                color: AppColors.textColor)),
-                        SizedBox(height: 15),
-                        AnimatedBuilder(
-                            animation: _animationController,
-                            builder: (context, child) => Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                                child: NeuSlider(
-                                    height: height / 35,
-                                    percent: getPercent(),
-                                    width: height / 2 + 10,
-                                    borderRadius:
-                                        BorderRadius.circular(height / 9.3)))),
-                        SizedBox(height: 15),
-                        Text(
-                            _languageBloc.language == 'us'
-                                ? 'Level: $level'
-                                : 'Cấp: $level',
-                            style: TextStyle(
-                                fontFamily: 'Bungee',
-                                fontSize: height / 20,
-                                color: AppColors.textColor))
+                child: SafeArea(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(children: [
+                          Text(
+                              _languageBloc.language == 'us'
+                                  ? 'Time:'
+                                  : 'Thời gian:',
+                              style: TextStyle(
+                                  fontFamily: 'Bungee',
+                                  fontSize: height / 20,
+                                  color: AppColors.textColor)),
+                          SizedBox(height: 15),
+                          AnimatedBuilder(
+                              animation: _animationController,
+                              builder: (context, child) => Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30),
+                                  child: NeuSlider(
+                                      height: height / 35,
+                                      percent: getPercent(),
+                                      width: height / 2 + 10,
+                                      borderRadius:
+                                          BorderRadius.circular(width / 5)))),
+                          SizedBox(height: 15),
+                          Text(
+                              _languageBloc.language == 'us'
+                                  ? 'Level: $level'
+                                  : 'Cấp: $level',
+                              style: TextStyle(
+                                  fontFamily: 'Bungee',
+                                  fontSize: height / 20,
+                                  color: AppColors.textColor))
+                        ]),
+                        BlocConsumer(
+                            bloc: _colorPickerBloc,
+                            listener: (context, state) async {
+                              if (state is ColorPickerDone) {
+                                _animationController.value = 0;
+                                if (_animationController.isDismissed)
+                                  _animationController.forward();
+                                durationChange(true);
+                                setState(() => level++);
+                              }
+                              if (state is ColorPickerContinue) {
+                                durationChange(false);
+                                setState(() {});
+                              }
+                              if (state is ColorPickerContinue) {
+                                second = 4;
+                                millisecond = 500;
+                                durationContinuesChange();
+                              }
+                              if (state is ColorPickerInitial) {
+                                second = 4;
+                                millisecond = 500;
+                                level = 1;
+                                _videoAds = 0;
+                                durationChange(false);
+                              }
+                              if (state is ColorPickerGameOver) {
+                                secondToWait(false);
+                                if (state.isNewHighScore)
+                                  _highScoreBloc.add(SetHighScoreEvent(level));
+                                if (level > 10 && adLevel % 2 == 1 && !kIsWeb) {
+                                  try {
+                                    final result = await InternetAddress.lookup(
+                                        'google.com');
+                                    if (result.isNotEmpty &&
+                                        result[0].rawAddress.isNotEmpty) {
+                                      createInterstitialAd()
+                                        ..load()
+                                        ..show();
+                                    }
+                                  } on SocketException catch (_) {}
+                                }
+                                adLevel++;
+                              }
+                              print(second + millisecond / 1000);
+                            },
+                            builder: (BuildContext context, state) {
+                              if (state is ColorPickerWaitting ||
+                                  state is ColorPickerInitial ||
+                                  state is ColorPickerDone ||
+                                  state is ColorPickerContinue) {
+                                return SizedBox(
+                                  height: width,
+                                  width: width,
+                                  child: ColorPicker(
+                                    level: level,
+                                    numOfColor: numOfColorPerLevel(level),
+                                  ),
+                                );
+                              }
+                              if (state is ColorPickerGameOver) {
+                                if (state.isNewHighScore) {
+                                  return _buildGameOverNoti(context, true);
+                                }
+                              }
+                              return _buildGameOverNoti(context, false);
+                            })
                       ]),
-                      BlocConsumer(
-                          bloc: _colorPickerBloc,
-                          listener: (context, state) async {
-                            if (state is ColorPickerDone) {
-                              _animationController.value = 0;
-                              if (_animationController.isDismissed)
-                                _animationController.forward();
-                              durationChange(true);
-                              setState(() => level++);
-                            }
-                            if (state is ColorPickerContinue) {
-                              durationChange(false);
-                              setState(() {});
-                            }
-                            if (state is ColorPickerContinue) {
-                              second = 4;
-                              millisecond = 500;
-                              durationContinuesChange();
-                            }
-                            if (state is ColorPickerInitial) {
-                              second = 4;
-                              millisecond = 500;
-                              level = 1;
-                              _videoAds = 0;
-                              durationChange(false);
-                            }
-                            if (state is ColorPickerGameOver) {
-                              secondToWait(false);
-                              if (state.isNewHighScore)
-                                _highScoreBloc.add(SetHighScoreEvent(level));
-                              if (level > 10 && adLevel % 2 == 1 && !kIsWeb) {
-                                try {
-                                  final result = await InternetAddress.lookup(
-                                      'google.com');
-                                  if (result.isNotEmpty &&
-                                      result[0].rawAddress.isNotEmpty) {
-                                    createInterstitialAd()
-                                      ..load()
-                                      ..show();
-                                  }
-                                } on SocketException catch (_) {}
-                              }
-                              adLevel++;
-                            }
-                            print(second + millisecond / 1000);
-                          },
-                          builder: (BuildContext context, state) {
-                            if (state is ColorPickerWaitting ||
-                                state is ColorPickerInitial ||
-                                state is ColorPickerDone ||
-                                state is ColorPickerContinue) {
-                              return SizedBox(
-                                height: height / 1.7,
-                                width: height / 1.7,
-                                child: ColorPicker(
-                                  level: level,
-                                  numOfColor: numOfColorPerLevel(level),
-                                ),
-                              );
-                            }
-                            if (state is ColorPickerGameOver) {
-                              if (state.isNewHighScore) {
-                                return _buildGameOverNoti(context, true);
-                              }
-                            }
-                            return _buildGameOverNoti(context, true);
-                          })
-                    ]))));
+                ))));
   }
 
   Widget _buildGameOverNoti(BuildContext context, bool isNewHighScore) {
@@ -348,8 +350,8 @@ class _NormalModeState extends State<NormalMode>
             shadowFallLength: 0,
             borderRadius: BorderRadius.circular(15),
             position: 30,
-            height: height / 1.7,
-            width: height / 1.7,
+            height: width,
+            width: width,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -364,7 +366,7 @@ class _NormalModeState extends State<NormalMode>
                           style: TextStyle(
                             fontFamily: 'Bungee',
                             color: AppColors.textColor,
-                            fontSize: height / 17,
+                            fontSize: width / 10,
                           ),
                         ),
                         Container(height: 15),
@@ -377,17 +379,19 @@ class _NormalModeState extends State<NormalMode>
                                   style: TextStyle(
                                     fontFamily: 'Bungee Inline',
                                     color: Colors.yellow[200],
-                                    fontSize: height / 40,
+                                    fontSize: width / 25,
                                   ),
                                 ),
                                 Text(
-                                    _languageBloc.language == "us"
-                                        ? "Level $level is your new high score!"
-                                        : "Cấp $level là điểm cao mới của bạn!",
-                                    style: TextStyle(
-                                        fontFamily: 'Bungee Inline',
-                                        color: Colors.yellow[200],
-                                        fontSize: height / 40))
+                                  _languageBloc.language == "us"
+                                      ? "Level $level is your new high score!"
+                                      : "Cấp $level là điểm cao mới của bạn!",
+                                  style: TextStyle(
+                                    fontFamily: 'Bungee Inline',
+                                    color: Colors.yellow[200],
+                                    fontSize: width / 25,
+                                  ),
+                                )
                               ])
                             : Container(height: 0)
                       ]),
@@ -402,7 +406,7 @@ class _NormalModeState extends State<NormalMode>
                                     shadowLength: 4,
                                     shadowFallLength: 0,
                                     borderRadius: BorderRadius.circular(
-                                      height / 9.3,
+                                      width / 5,
                                     ),
                                     position: 5,
                                     lightAndDarkShadow: {
@@ -411,8 +415,8 @@ class _NormalModeState extends State<NormalMode>
                                       'lightShadow':
                                           AppColors.sliderColor.withBlue(4),
                                     },
-                                    height: height / 9.3,
-                                    width: height / 9.3,
+                                    height: width / 5,
+                                    width: width / 5,
                                     switchShadow: false,
                                     child: Center(
                                         child: Stack(children: [
@@ -420,7 +424,7 @@ class _NormalModeState extends State<NormalMode>
                                           child: Transform.rotate(
                                               angle: pi / 2,
                                               child: Icon(Icons.local_movies,
-                                                  size: height / 17,
+                                                  size: width / 10,
                                                   color: AppColors.textColor))),
                                       Center(
                                           child: Text('+1',
